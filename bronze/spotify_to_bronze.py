@@ -26,6 +26,10 @@ client_secret = secrets.get('client_secret')
 
 # COMMAND ----------
 
+print(client_id)
+
+# COMMAND ----------
+
 
 auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)
@@ -73,7 +77,7 @@ for country_code in country_codes:
         df = pd.DataFrame(top_tracks)
         
         spark_df = spark.createDataFrame(df)
-        spark_df.withColumn("day", F.current_date())
+        spark_df = spark_df.withColumn("day", F.current_date())
         spark_df.write.format("delta").mode("overwrite").option("overwriteSchema", "True").saveAsTable(f'treinamentodatabricks.bronze.spotify_top_50_{country_code.lower()}')
         
         print(f"Saved Top 50 Tracks for {country_code} to Delta table treinamentodatabricks.bronze.spotify_top_50_{country_code.lower()}")
