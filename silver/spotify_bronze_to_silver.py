@@ -28,7 +28,7 @@ def union_tables(tables):
 
 # COMMAND ----------
 
-countries= ['br','ar']
+countries= ['US', 'GB', 'DE', 'FR', 'BR', 'CA', 'AU', 'MX', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'PL', 'PT', 'AR', 'CL', 'CO', 'PE', 'UG', 'UY']
 
 source_tables = []
 for i in countries:
