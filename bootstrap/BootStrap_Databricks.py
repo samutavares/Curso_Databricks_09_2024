@@ -24,6 +24,7 @@ df = spark.createDataFrame(data, schema=columns)
 
 # DBTITLE 1,Read files
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql import functions as f
 
 # Define a schema for reading JSON and CSV data
 schema = StructType([
@@ -46,15 +47,38 @@ df_csv = spark.read.schema(schema).option("header", "true").csv(f"{folder_mock}/
 
 # COMMAND ----------
 
-# DBTITLE 1,Display MOCK_DATA CSV
-
-
-# COMMAND ----------
-
-# DBTITLE 1,Display MOCK_DATA JSON
-
-
-# COMMAND ----------
-
 # DBTITLE 1,Simple JOIN with different datasources
+df_joined = df_json.join(df_csv, df_json["id"] == df_csv["id"], "inner")
+display(df_joined)
 
+# COMMAND ----------
+
+# DBTITLE 1,Split Columns
+df_csv_limit = df_csv.limit(1)
+col_split = f.split(df_csv_limit["ip_address"], "\.")
+df_split_column = df_csv_limit.withColumns({
+    "part1": col_split.getItem(0),
+    "part2": col_split.getItem(1),
+    "part3": col_split.getItem(2),
+    "part4": col_split.getItem(3)
+})
+df_split_column.display()
+
+# COMMAND ----------
+
+# DBTITLE 1,Split a column into multiple rows
+df_split_row = df_csv_limit.withColumn("split_row", f.explode(col_split))
+df_split_row.display()
+
+# COMMAND ----------
+
+spark.sql("SELECT * FROM {_df}", _df=df_csv).show()
+
+# COMMAND ----------
+
+df_json.createOrReplaceTempView("tmp_df_json")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from tmp_df_json
