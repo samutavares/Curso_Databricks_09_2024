@@ -31,7 +31,7 @@ auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=clien
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 country_codes = [
-    'US', 'GB', 'DE', 'FR', 'BR', 'CA', 'AU', 'MX', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'PL', 'PT', 'AR', 'CL', 'CO', 'PE', 'UG', 'UY'
+    'US', 'GB', 'DE', 'FR', 'BR', 'CA', 'AU', 'MX', 'IT', 'ES', 'SE', 'NO', 'DK', 'FI', 'PL', 'PT', 'AR', 'CL', 'CO', 'PE', 'UG', 'UY'
 ]
 
 def get_playlist_id_by_country(sp, country_code):
